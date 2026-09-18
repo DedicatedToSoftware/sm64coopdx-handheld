@@ -44,14 +44,23 @@ Docker/QEMU on an x86_64 host:
 ```sh
 docker run --rm --platform linux/arm64 \
   -v "$PWD":/build -w /build debian:bullseye bash -lc '
+    printf "%s\n" \
+      "deb http://archive.debian.org/debian bullseye main" \
+      "deb http://archive.debian.org/debian bullseye-updates main" \
+      > /etc/apt/sources.list &&
+    printf "Acquire::Check-Valid-Until \"false\";\n" > /etc/apt/apt.conf.d/99archive &&
     apt-get update &&
     apt-get install -y --no-install-recommends \
       build-essential python3 libglew-dev libsdl2-dev libz-dev \
-      libcurl4-openssl-dev bsdmainutils &&
-    make HANDHELD=1 DISCORD_SDK=0 UPDATER=0 \
+      libcurl4-openssl-dev bsdmainutils file binutils zip pkg-config &&
+    make TARGET_RK3326=1 UPDATER=0 \
       EXTRA_CPP_FLAGS="-std=c++17" -j$(nproc)
   '
 ```
+
+Bullseye left the live mirrors, so apt is pinned to the frozen
+`archive.debian.org` snapshot (there is no bullseye security suite in the
+archive; this is a throwaway build container, so that is fine).
 
 Do not pass `LDFLAGS` on the command line. Doing so replaces the linker flags
 defined by the Makefile.

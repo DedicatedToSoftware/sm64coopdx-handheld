@@ -39,6 +39,14 @@ jobs:
             -v "$PWD":/build -w /build debian:bullseye bash -l <<'DOCKER'
           set -e
           export DEBIAN_FRONTEND=noninteractive
+          # Bullseye left the live mirrors (bullseye-security 404s), so pin
+          # apt to the frozen archive snapshot. No security suite exists for
+          # bullseye in the archive, but this is a throwaway build container.
+          printf '%s\n' \
+            'deb http://archive.debian.org/debian bullseye main' \
+            'deb http://archive.debian.org/debian bullseye-updates main' \
+            > /etc/apt/sources.list
+          printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99archive
           apt-get update
           apt-get install -y --no-install-recommends \
             build-essential python3 libglew-dev libsdl2-dev libz-dev \
