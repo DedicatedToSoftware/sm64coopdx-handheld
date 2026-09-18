@@ -73,7 +73,7 @@ void djui_panel_display_create(struct DjuiBase* caller) {
         djui_checkbox_create(body, DLANG(DISPLAY, VSYNC), &configWindow.vsync, djui_panel_display_apply);
 
 #ifdef HANDHELD
-        djui_checkbox_create(body, DLANG(DISPLAY, HIDEF), &configHandheldHidef, NULL);
+        djui_checkbox_create(body, DLANG(DISPLAY, LOWRES), &configHandheldLowres, NULL);
 #endif
 
         if (GAPI_MAX > 1) {

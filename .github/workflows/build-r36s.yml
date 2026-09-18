@@ -88,24 +88,25 @@ jobs:
           fi
           echo "--- packaging ---"
           rm -rf /tmp/dist
-          mkdir -p /tmp/dist/sm64coopdx
+          mkdir -p /tmp/dist/sm64coopdx/licenses
           cd build/us_pc
           zip -qr /tmp/dist/sm64coopdx/files.zip dynos lang mods palettes
           mv sm64coopdx.arm /tmp/dist/sm64coopdx/sm64coopdx.aarch64
           cd /build
-          cp -r port/sm64coopdx/. /tmp/dist/sm64coopdx/
-          cp "port/Super Mario 64 Co-op DX.sh" /tmp/dist/
-          cd /tmp/dist && zip -qr /build/sm64coopdx_r36s.zip .
+          cp port/sm64coopdx/cover.png port/sm64coopdx/screenshot.png /tmp/dist/sm64coopdx/
+          cp port/sm64coopdx/licenses/miniz.LICENSE /tmp/dist/sm64coopdx/licenses/
+          cp "port/sm64coopdx/Super Mario 64 Co-op DX.sh" /tmp/dist/
+          cd /tmp/dist && zip -qr /build/sm64coopdx.zip .
           DOCKER
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sm64coopdx-r36s
-          path: sm64coopdx_r36s.zip
+          name: sm64coopdx
+          path: sm64coopdx.zip
 
       - name: Attach to release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: sm64coopdx_r36s.zip
+          files: sm64coopdx.zip

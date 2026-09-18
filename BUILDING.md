@@ -122,12 +122,16 @@ No SDL preload is required for this build.
 
 ## PortMaster Package
 
-The `port/` directory holds the PortMaster templates (launcher script,
-`port.json`, `gameinfo.xml`, cover art and licenses). The CI workflow assembles
-the released `sm64coopdx_r36s.zip` from the built binary, the `dynos/ lang/
-mods/ palettes/` data folders (as `files.zip`) and these templates. Install by
-unzipping into `/roms/ports/`, then provide a vanilla Super Mario 64 (USA)
-ROM as `sm64coopdx/baserom.us.z64`.
+The `port/sm64coopdx/` directory holds the PortMaster port (`Super Mario 64
+Co-op DX.sh` launcher, `port.json`, `README.md`, `gameinfo.xml`, cover art,
+screenshot and `licenses/`). The CI workflow assembles the released
+`sm64coopdx.zip` from the built binary, the `dynos/ lang/ mods/ palettes/`
+data folders (as `files.zip`), the cover art, screenshot and licenses, plus
+the launcher script. The zip contains exactly the `port.json` items: the
+launcher and the `sm64coopdx/` data directory. Install by unzipping into
+`/roms/ports/`, then provide a vanilla Super Mario 64 (USA) ROM as a `.z64`
+file (e.g. `sm64coopdx/baserom.us.z64`); the launcher renames any `.z64`
+found in the port directory automatically on first run.
 
 ## Interrupted Build Recovery
 

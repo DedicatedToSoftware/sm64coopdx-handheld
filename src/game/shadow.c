@@ -430,11 +430,11 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
         *yPosVtx = s.floorHeight;
     } else {
 #ifdef HANDHELD
-        // Hi-Def mode re-samples the floor under each 9-vertex corner so the
+        // Native-res mode re-samples the floor under each 9-vertex corner so the
         // soft-edge alpha fade below can soften the shadow across floor-triangle
         // seams. This is the per-corner raycast that was stripped for perf; it
-        // only runs when the Hi-Def toggle is on.
-        if (configHandheldHidef && shadowVertexType == SHADOW_WITH_9_VERTS) {
+        // only runs when the Low-Res toggle is off.
+        if (!configHandheldLowres && shadowVertexType == SHADOW_WITH_9_VERTS) {
             *yPosVtx = find_floor_height_and_data(*xPosVtx, s.parentY + 1, *zPosVtx, &dummy);
         } else
 #endif
@@ -459,11 +459,11 @@ void make_shadow_vertex(Vtx *vertices, s8 index, struct Shadow s, s8 shadowVerte
     calculate_vertex_xyz(index, s, &xPosVtx, &yPosVtx, &zPosVtx, shadowVertexType);
 
 #ifdef HANDHELD
-    // Hi-Def mode: soften the shadow's alpha where a 9-vertex corner lands on a
+    // Native-res mode: soften the shadow's alpha where a 9-vertex corner lands on a
     // differently-angled floor triangle. `diff` is the gap between the per-corner
     // floor sample (set above) and the flat extrapolation; the position is
     // snapped back to the extrapolated value so only the solidity is affected.
-    if (configHandheldHidef && shadowVertexType == SHADOW_WITH_9_VERTS) {
+    if (!configHandheldLowres && shadowVertexType == SHADOW_WITH_9_VERTS) {
         f32 oldYPosVtx = yPosVtx;
         yPosVtx = extrapolate_vertex_y_position(s, xPosVtx, zPosVtx);
         f32 diff = fabs(oldYPosVtx - yPosVtx) / 5.0f;
