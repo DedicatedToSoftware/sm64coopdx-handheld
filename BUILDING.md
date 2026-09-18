@@ -50,7 +50,7 @@ docker run --rm --platform linux/arm64 \
       > /etc/apt/sources.list &&
     printf "Acquire::Check-Valid-Until \"false\";\n" > /etc/apt/apt.conf.d/99archive &&
     apt-get update &&
-    apt-get install -y --no-install-recommends \
+    apt-get install -y --allow-downgrades --no-install-recommends \
       build-essential python3 libglew-dev libsdl2-dev libz-dev \
       libcurl4-openssl-dev bsdmainutils file binutils zip pkg-config &&
     make TARGET_RK3326=1 UPDATER=0 \
