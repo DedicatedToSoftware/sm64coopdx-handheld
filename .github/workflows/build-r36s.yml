@@ -48,10 +48,14 @@ jobs:
             > /etc/apt/sources.list
           printf 'Acquire::Check-Valid-Until "false";\n' > /etc/apt/apt.conf.d/99archive
           apt-get update
-          # --allow-downgrades: the base image predates archival and carries
-          # newer patch revisions (e.g. libc6 ...+deb11u14) than the frozen
-          # archive's -dev packages expect (...+deb11u11). Downgrading to the
-          # archive's consistent set is fine for a throwaway build container.
+          # The base image predates archival and carries newer patch revisions
+          # (e.g. libc6 ...+deb11u14) than the frozen archive's -dev packages
+          # expect (...+deb11u11). Converge the four skewed runtimes to the
+          # archive's exact versions first; the main install then resolves.
+          # (Verified in a local arm64 container, 2026-09-19.)
+          apt-get install -y --allow-downgrades \
+            libc6=2.31-13+deb11u11 libsepol1=3.1-1 \
+            libudev1=247.3-7+deb11u5 perl-base=5.32.1-4+deb11u3
           apt-get install -y --allow-downgrades --no-install-recommends \
             build-essential python3 libglew-dev libsdl2-dev libz-dev \
             libcurl4-openssl-dev bsdmainutils file binutils zip pkg-config

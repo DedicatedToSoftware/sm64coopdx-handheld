@@ -50,6 +50,9 @@ docker run --rm --platform linux/arm64 \
       > /etc/apt/sources.list &&
     printf "Acquire::Check-Valid-Until \"false\";\n" > /etc/apt/apt.conf.d/99archive &&
     apt-get update &&
+    apt-get install -y --allow-downgrades \
+      libc6=2.31-13+deb11u11 libsepol1=3.1-1 \
+      libudev1=247.3-7+deb11u5 perl-base=5.32.1-4+deb11u3 &&
     apt-get install -y --allow-downgrades --no-install-recommends \
       build-essential python3 libglew-dev libsdl2-dev libz-dev \
       libcurl4-openssl-dev bsdmainutils file binutils zip pkg-config &&
